@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema(
             enum: ["candidate", "interviewer", "admin"],
             default: "candidate",
         },
+        assignedAssessments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assessment" }],
+        submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Submission" }],
     },
     { timestamps: true }
 );
