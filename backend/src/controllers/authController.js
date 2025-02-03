@@ -61,3 +61,18 @@ exports.logout = async (req, res) => {
     });
     res.status(200).json({ message: "Logout successful" });
 };
+
+exports.liveblocksAuth = async (req, res) => {
+    const { roomId, userId } = req.body;
+
+    try {
+        const session = await liveblocksClient.sessions.create(roomId, {
+            userId,
+        });
+        res.status(201).json({ token: session.token });
+    } catch (error) {
+        res.status(500).json({ message: "Authentication error", error });
+    }
+};
+
+
