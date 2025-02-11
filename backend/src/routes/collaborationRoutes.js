@@ -7,4 +7,4 @@ router.post('/create', createRoom);
 router.get('/:roomId', getRoom)
 router.delete('/:roomId', deleteRoom)
 
-export default router;
+module.exports = router;

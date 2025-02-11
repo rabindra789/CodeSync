@@ -1,17 +1,15 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import connectDB from "./config/db.js";
-import { connectRedis } from "./config/redis.js";
-import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import assessmentRoutes from "./routes/assessmentRoutes.js";
-import submissionRoutes from "./routes/submissionRoutes.js";
-import codeRoutes from "./routes/codeRoutes.js";
-import collaborationRoutes from "./routes/collaborationRoutes.js";
-import notificationRoutes from "./routes/notificationRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
-import errorHandler from "./middlewares/errorHandler.js";
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
+const assessmentRoutes = require("./routes/assessmentRoutes.js");
+const submissionRoutes = require("./routes/submissionRoutes.js");
+const codeRoutes = require("./routes/codeRoutes.js");
+const collaborationRoutes = require("./routes/collaborationRoutes.js");
+// const notificationRoutes = require("./routes/notificationRoutes.js");
+// const adminRoutes = require("./routes/adminRoutes.js");
+// const errorHandler = require("./middlewares/errorHandler.js");
 
 const app = express();
 
@@ -22,12 +20,13 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/assessments", assessmentRoutes);
+// app.use("/api/test-cases", testCaseRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/code", codeRoutes);
 app.use("/api/collaborations", collaborationRoutes);
-app.use("/api/notifications", notificationRoutes);
-app.use("/api/admin", adminRoutes);
+// app.use("/api/notifications", notificationRoutes);
+// app.use("/api/admin", adminRoutes);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
-export default app;
+module.exports = app;

@@ -2,9 +2,9 @@ const User = require("../models/User");
 const Assessment = require("../models/Assessment");
 const Submission = require("../models/Submission");
 
-export const getUserProfile = async (req, res) => {
+exports.getUserProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userId);
         if(!user) return res.status(404).json({message: "User not found."});
         res.status(200).json(user);
     } catch (error) {
@@ -12,10 +12,10 @@ export const getUserProfile = async (req, res) => {
     }
 }
 
-export const updateUserProfile = async (req, res) => {
+exports.updateUserProfile = async (req, res) => {
     try {
         const {name, email, role} = req.body;
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userId);
 
         if(!user) {
             return res.status(404).json({message: "User not found."})
@@ -35,39 +35,56 @@ export const updateUserProfile = async (req, res) => {
     }
 }
 
-export const getUserAsessments = async (req, res) => {
+exports.getUserAssessments = async (req, res) => {
     try {
-        const assessments = await Assessment.find({userId: req.params.id});
+        // console.log("Fetching assessments for user:", req.params.id);
+
+        // Find assessments where the user is either the creator or assigned
+        const assessments = await Assessment.find({
+            $or: [
+                { createdBy: req.params.userId },
+                { assignedTo: req.params.userId }
+            ]
+        });
+
+        console.log("Assessments found:", assessments);
         res.status(200).json(assessments);
     } catch (error) {
-        res.status(500).json({message: "Error fetching assessments."})
+        console.error("Error fetching assessments:", error);
+        res.status(500).json({ message: "Error fetching assessments.", error: error.message });
     }
-}
+};
 
-export const getUserSubmissions = async (req, res) => {
+
+exports.getUserSubmissions = async (req, res) => {  
     try {
-        const submissions = await Submission.find({userId: req.params.id});
+
+        // console.log("Fetching submissions for user:", req.params.id);
+        // Find assessments where the user is either the creator or assigned
+        const submissions = await Submission.find({userId: req.params.userId});
+
         res.status(200).json(submissions);
     } catch (error) {
-        res.status(500).json({message: "Error fetching submissions."})
+        res.status(500).json({ message: "Error fetching submissions." });
     }
-}
+};
 
-export const updateUserRole = async (req, res) => {
+exports.updateUserRole = async (req, res) => {
     try {
-        if(req.user.role !== "admin"){
-            return res.status(403).json({message: "Unauthorized to change role."})
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ message: "Unauthorized to change role." });
         }
 
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userId);
         if (!user) {
-            return res.status(404).json({message: "User not found."})
+            return res.status(404).json({ message: "User not found." });
         }
 
+        const { role } = req.body;  // Added this line to fix undefined 'role'
         user.role = role || user.role;
         await user.save();
-        res.status(200).json({message: "User role updated successfully."})
+        res.status(200).json({ message: "User role updated successfully." });
     } catch (error) {
-        res.status(500).json({message: "Error updating user role."})
+        res.status(500).json({ message: "Error updating user role." });
     }
-}
+};

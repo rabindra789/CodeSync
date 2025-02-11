@@ -1,7 +1,8 @@
-const Assessment = require("../models/Assessment");
+const mongoose = require("mongoose");
+const Assessment = require("../models/Assessment.js");
 const User = require("../models/User");
 
-export const getAssessments = async (req, res) => {
+exports.getAssessments = async (req, res) => {
     try {
         const assessments = await Assessment.find();
         res.json(assessments);
@@ -10,7 +11,7 @@ export const getAssessments = async (req, res) => {
     }
 };
 
-export const createAssessment = async (req, res) => {
+exports.createAssessment = async (req, res) => {
     try {
         if (req.user.role !== "interviewer" && req.user.role !== "admin") {
             return res
@@ -37,29 +38,37 @@ export const createAssessment = async (req, res) => {
     }
 };
 
-export const getAssessment = async (req, res) => {
+
+exports.getAssessment = async (req, res) => {
     try {
-        const assessment = await Assessment.findById(req.params.id);
-        if (!assessment) {
-            return res.status(404).json({ message: "Assessment not found." });
-        }
-        res.json(assessment);
+        console.log("Fetching assessments for user:", req.params.assessmentId);
+
+        const userId = new mongoose.Types.ObjectId(req.params.assessmentId); // Convert to ObjectId
+
+        const assessments = await Assessment.find({
+            $or: [{ createdBy: userId }, { assignedTo: userId }]
+        });
+
+        console.log("Assessments found:", assessments);
+        res.status(200).json(assessments);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching assessment." });
+        console.error("Error fetching assessments:", error);
+        res.status(500).json({ message: "Error fetching assessments.", error: error.message });
     }
 };
 
-export const updateAssessment = async (req, res) => {
+
+exports.updateAssessment = async (req, res) => {
     try {
         const { title, description, difficulty, testCases } = req.body;
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment) {
             return res.status(404).json({ message: "Assessment not found." });
         }
 
         if (
             req.user.role !== "admin" &&
-            req.user.id !== assessment.createdBy.toString()
+            req.user.assessmentId !== assessment.createdBy.toString()
         ) {
             return res
                 .status(403)
@@ -77,9 +86,9 @@ export const updateAssessment = async (req, res) => {
     }
 };
 
-export const deleteAssessment = async (req, res) => {
+exports.deleteAssessment = async (req, res) => {
     try {
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment) {
             return res.status(404).json({ message: "Assessment not found." });
         }
@@ -91,7 +100,7 @@ export const deleteAssessment = async (req, res) => {
     }
 };
 
-export const assignAssessment = async (req, res) => {
+exports.assignAssessment = async (req, res) => {
     try {
         const { candidateId } = req.body;
         const candidate = await User.findById(candidateId);
@@ -100,7 +109,7 @@ export const assignAssessment = async (req, res) => {
             return res.status(400).json({ message: "Invalid candidate" });
         }
 
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment) {
             return res.status(404).json({ message: "Assessment not found." });
         }
@@ -119,9 +128,9 @@ export const assignAssessment = async (req, res) => {
     }
 };
 
-export const getAssignedCandidates = async (req, res) => {
+exports.getAssessmentCandidates = async (req, res) => {
     try {
-        const assessment = await Assessment.findById(req.params.id).populate(
+        const assessment = await Assessment.findById(req.params.assessmentId).populate(
             "assignedTo",
             "name email"
         );
@@ -134,11 +143,11 @@ export const getAssignedCandidates = async (req, res) => {
     }
 };
 
-export const addTestCase = async (req, res) => {
+exports.addTestCase = async (req, res) => {
     try {
         const { input, expectedOutput } = req.body;
 
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment)
             return res.status(404).json({ message: "Assessment not found" });
 
@@ -151,9 +160,9 @@ export const addTestCase = async (req, res) => {
     }
 };
 
-export const getTestCases = async (req, res) => {
+exports.getTestCases = async (req, res) => {
     try {
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment)
             return res.status(404).json({ message: "Assessment not found" });
 
@@ -163,9 +172,9 @@ export const getTestCases = async (req, res) => {
     }
 };
 
-export const deleteTestCase = async (req, res) => {
+exports.deleteTestCase = async (req, res) => {
     try {
-        const assessment = await Assessment.findById(req.params.id);
+        const assessment = await Assessment.findById(req.params.assessmentId);
         if (!assessment)
             return res.status(404).json({ message: "Assessment not found" });
 

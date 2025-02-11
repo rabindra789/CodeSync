@@ -6,7 +6,7 @@ const JUDGE0_API_URL = env.JUDGE0_API_URL;
 
 // Execute Code
 
-export const executeCode = async (req, res) => {
+exports.executeCode = async (req, res) => {
     try {
         const {sourceCode, languageId, stdin} = req.body;
 
@@ -37,11 +37,11 @@ export const executeCode = async (req, res) => {
 
 // Get Execution Status
 
-export const getExecutionStatus = async (req, res) => {
+exports.getExecutionStatus = async (req, res) => {
     try {
-        const {id} = req.params;
+        const {executionId} = req.params;
 
-        const response = await axios.get(`${JUDGE0_API_URL}/submissions/${id}`, {
+        const response = await axios.get(`${JUDGE0_API_URL}/submissions/${executionId}`, {
             headers: {
                 "x-rapidapi-key": JUDGE0_API_KEY,
             },
@@ -55,11 +55,11 @@ export const getExecutionStatus = async (req, res) => {
 
 // Get Execution Result
 
-export const getExecutionResult = async (req, res) => {
+exports.getExecutionResult = async (req, res) => {
     try {
-        const {id} = req.params;
+        const {executionId} = req.params;
 
-        const response = await axios.get(`${JUDGE0_API_URL}/submissions/${id}`, {
+        const response = await axios.get(`${JUDGE0_API_URL}/submissions/${executionId}`, {
             headers: {
                 "x-rapidapi-key": JUDGE0_API_KEY,
             },

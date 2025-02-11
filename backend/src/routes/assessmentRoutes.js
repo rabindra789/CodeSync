@@ -1,22 +1,22 @@
 const express = require("express");
-const { getAssessments, getAssessment, createAssessment, updateAssessment, deleteAssessment, assignAssessment, getAssessmentCandidates } = require("../controllers/assessmentController");
-const { authMiddleware } = require("../middlewares/authMiddleware");
+const { getAssessments, getAssessment, createAssessment, updateAssessment, deleteAssessment, assignAssessment, getAssessmentCandidates, addTestCase, getTestCases, deleteTestCase } = require("../controllers/assessmentController.js");
+const { authMiddleware } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
 router.get("/", authMiddleware, getAssessments);
-router.post("/", authMiddleware, createAssessment);
-router.get("/:id", authMiddleware, getAssessment);
-router.put("/:id", authMiddleware, updateAssessment);
-router.delete("/:id", authMiddleware, deleteAssessment);
+router.post("/create", authMiddleware, createAssessment);
+router.get("/:assessmentId/get", authMiddleware, getAssessment);
+router.put("/:assessmentId/update", authMiddleware, updateAssessment);
+router.delete("/:assessmentId/delete", authMiddleware, deleteAssessment);
 
 
-router.post("/:id/assign", authMiddleware, assignAssessment);
-router.get("/:id/candidates", authMiddleware, getAssessmentCandidates);
+router.post("/:assessmentId/assign", authMiddleware, assignAssessment);
+router.get("/:assessmentId/candidates", authMiddleware, getAssessmentCandidates);
 
 // Test cases management
-router.post("/:id/test-cases", authMiddleware, adminMiddleware, addTestCase);
-router.get("/:id/test-cases", authMiddleware, getTestCases);
-router.delete("/:id/test-cases/:testCaseId", authMiddleware, adminMiddleware, deleteTestCase);
+router.post("/:assessmentId/test-cases", authMiddleware, addTestCase);
+router.get("/:assessmentId/test-cases", authMiddleware, getTestCases);
+router.delete("/:assessmentId/test-cases/:testCaseId", authMiddleware,  deleteTestCase);
 
 module.exports = router;

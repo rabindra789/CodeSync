@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const testCaseSchema = new mongoose.Schema({
     input: { type: String, required: true },
@@ -23,4 +23,4 @@ const assessmentSchema = new mongoose.Schema(
 );
 
 const Assessment = mongoose.model("Assessment", assessmentSchema);
-export default Assessment;
+module.exports = Assessment;

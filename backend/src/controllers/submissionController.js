@@ -7,7 +7,7 @@ const JUDGE0_API_KEY = env.JUDGE0_API_KEY;
 const JUDGE0_API_URL = env.JUDGE0_API_URL;
 
 // Submit Code
-export const submitCode = async (req, res) => {
+exports.submitCode = async (req, res) => {
     try {
         const { assessmentId, sourceCode, languageId } = req.body;
 
@@ -64,9 +64,9 @@ export const submitCode = async (req, res) => {
 };
 
 // Get Submission by ID
-export const getSubmissionById = async (req, res) => {
+exports.getSubmissionById = async (req, res) => {
     try {
-        const submission = await Submission.findById(req.params.id);
+        const submission = await Submission.findById(req.params.submissionId);
         if (!submission) {
             return res.status(404).json({message: "Submission not found"});
         }
@@ -77,9 +77,9 @@ export const getSubmissionById = async (req, res) => {
 }
 
 // Get Submission Result
-export const getSubmissionResult = async (req, res) => {
+exports.getSubmissionResult = async (req, res) => {
     try {
-        const submission = await Submission.findById(req.params.id);
+        const submission = await Submission.findById(req.params.submissionId);
         if (!submission) {
             return res.status(404).json({message: "Submission not found"});
         }
@@ -108,7 +108,7 @@ export const getSubmissionResult = async (req, res) => {
 
 
 // Get All Submissions for User
-export const getAllSubmissionForUser = async (req, res) => {
+exports.getAllSubmissionForUser = async (req, res) => {
     try {
         const submissions = await Submission.find({userId: req.params.userId});
         res.json(submissions);
