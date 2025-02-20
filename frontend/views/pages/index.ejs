@@ -1,0 +1,77 @@
+<%- include("../partials/navbar.ejs") %>
+<section class="hero">
+    <div class="hero-container">
+        <h1>Collaborative, Code, and Suceed</h1>
+        <p>CodeSync brings developers together in real-time for seamless coding collaboration, perfect for job
+            interviews, assessments and teamwork.</p>
+    </div>
+    <div class="hero-image">
+        <video autoplay muted src="/img/hero-image.webm" type="video/webm"></video>
+    </div>
+</section>
+
+<section id="features" class="features">
+    <h1>Why choose CodeSync?</h1>
+    <div class="features-container">
+        <div class="feature-box">
+            <div class="feature-img">
+                <img loading="lazy" src="/img/rtc.svg" alt="">
+            </div>
+            <div class="feature-text">
+                <h3>Real-time Collaboration</h3>
+                <p>Work together seamlessly with Liveblocks-powered real-time collaboration. See teammate’s cursors,
+                    edits, and suggestions instantly, no matter where they are.</p>
+            </div>
+        </div>
+        <div class="feature-box">
+            <div class="feature-img">
+                <img loading="lazy" src="/img/sse.svg" alt="">
+            </div>
+            <div class="feature-text">
+                <h3>Secure Sandboxed Execution</h3>
+                <p>Run code in a secure environment with support for multiple languages like Python, Java, C++, and
+                    more. Perfect for assessments and team problem-solving.</p>
+            </div>
+        </div>
+        <div class="feature-box">
+            <div class="feature-img">
+                <img loading="lazy" src="/img/bfa.svg" alt="">
+            </div>
+            <div class="feature-text">
+                <h3>Built For Assessments</h3>
+                <p>Streamline job interviews and coding assessments with live feedback, test cases, and scoring tools
+                    integrated into a collaborative platform.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="how-it-works">
+    <div class="how-it-works-container">
+        <div class="hiw-text">
+            <h1>How It Works?</h1>
+            <ol>
+                <li>Sign up and create a room.</li>
+                <li>Invite teammates and start coding.</li>
+                <li>Run your code and get results in real-time.</li>
+            </ol>
+        </div>
+        <div class="hiw-img">
+            <img loading="lazy" src="/img/pixelcut-export (2).png" alt="">
+        </div>
+    </div>
+
+</section>
+
+<section id="contact" class="contact">
+    <div style="width: 40%;">
+        <h1>Stay updated with CodeSync</h1>
+        <p>Get the latest features, coding tips, and exclusive updates straight to your inbox.</p>
+    </div>
+    <div style="width: 25%;">
+        <input class="subs-input" type="email" placeholder="Enter your email" required>
+        <button class="subs-btn">Subscribe</button>
+    </div>
+</section>
+
+<%- include("../partials/footer.ejs") %>

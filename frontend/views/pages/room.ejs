@@ -1,0 +1,21 @@
+<script type="module">
+    import { createClient } from "https://cdn.skypack.dev/@liveblocks/client";
+
+    const client = createClient({ publicApiKey: "YOUR_LIVEBLOCKS_PUBLIC_KEY" });
+    const room = client.enterRoom("<%= roomId %>");
+
+    const editor = document.getElementById("editor");
+
+    room.subscribe("storage", (updates) => {
+        updates.forEach(update => {
+            if (update.key === "code") {
+                editor.value = update.value;
+            }
+        });
+    });
+
+    editor.addEventListener("input", () => {
+        room.updateStorage("code", editor.value);
+    });
+</script>
+<textarea id="editor" placeholder="Start coding..."></textarea>
