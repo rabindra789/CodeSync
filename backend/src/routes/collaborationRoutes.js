@@ -4,7 +4,7 @@ const { createRoom, getRoom, deleteRoom } = require('../controllers/collaboratio
 const router = express.Router();
 
 router.post('/create', createRoom);
-router.get('/:roomId', getRoom)
+router.get('/:userId', getRoom)
 router.delete('/:roomId', deleteRoom)
 
 module.exports = router;

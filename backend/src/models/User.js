@@ -11,8 +11,14 @@ const userSchema = new mongoose.Schema(
             enum: ["candidate", "interviewer", "admin"],
             default: "candidate",
         },
-        assignedAssessments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assessment" }],
-        submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Submission" }],
+        assignedAssessments: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Assessment" },
+        ],
+        submissions: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Submission" },
+        ],
+
+        rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }], // Store room IDs
     },
     { timestamps: true }
 );
@@ -26,7 +32,7 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
-}
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -21,37 +21,48 @@ exports.signup = async (req, res) => {
             email,
             token: generateToken(user._id),
         });
+        console.log("User created successfully");
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 };
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
-
     try {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({ message: "user not found." });
+            return res.status(401).json({ message: "User not found." });
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch)
             return res.status(401).json({ message: "Invalid credentials." });
 
+        // Generate token
         const token = generateToken(user._id);
+
+        // Set token in a cookie and send the response
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+            secure: false,
+            sameSite: "lax",
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 1 day expiry
         });
-        res.status(200).json({ message: "Login successful." });
+
+        // Send success response
+        return res.status(200).json({ 
+            message: "Login successful.",
+            userId: user._id,
+            user // Optionally, you can send the userId in the response
+        });
+
     } catch (error) {
-        res.status(500).json({ message: "Error in logged in." });
+        return res.status(500).json({ message: "Error logging in." });
     }
 };
+
 
 exports.logout = async (req, res) => {
     res.clearCookie("token", "", {
@@ -74,5 +85,3 @@ exports.liveblocksAuth = async (req, res) => {
         res.status(500).json({ message: "Authentication error", error });
     }
 };
-
-

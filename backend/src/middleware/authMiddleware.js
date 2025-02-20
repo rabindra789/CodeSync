@@ -1,19 +1,27 @@
 const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  // console.log("Authorization Header:", authHeader); // Debugging
+  console.log("Headers:", req.headers); // ✅ Debugging
+  console.log("Cookies:", req.cookies); // ✅ Debugging
+  let token = null;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.split(" ")[1];
+  }
+
+  if (!token && req.cookies?.token) {
+    token = req.cookies.token;
+  }
+
+
+  if (!token) {
     return res.status(401).json({ message: "Unauthorized: No Token Provided" });
   }
 
-  const token = authHeader.split(" ")[1];
-  // console.log("Extracted Token:", token); // Debugging
-
   try {
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log("Decoded Token:", decoded); // Debugging
     req.user = decoded;
     next();
   } catch (error) {
