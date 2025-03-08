@@ -1,30 +1,34 @@
 <%- include(dashboard ? "../partials/dashboard-navbar.ejs" : "../partials/navbar.ejs" ) %>
-<h1><%= userId %></h1>
     <section class="dashboard">
-        <h2>Your Rooms</h2>
-        <div id="roomsContainer">
-            <% if (rooms.length===0) { %>
-                <p>You have not created any rooms yet.</p>
-                <% } else { %>
-                    <% rooms.forEach(room=> { %>
-                        <div class="room">
-                            <a href="/room/<%= room._id %>">
-                                <h3>
-                                    <%= room.name %>
-                                </h3>
-                            </a>
-                            <button class="deleteRoom" data-id="<%= room._id %>">Delete</button>
-                        </div>
-                        <% }) %>
-                            <% } %>
+        <div class="createRoom">
+            <h2>Create a New Room</h2>
+            <form action="/create-room" method="POST">
+                <input type="hidden" name="userId" value="<%= userId %>">
+                <input type="text" name="roomName" class="createRoom-in" placeholder="Enter Room Name" required>
+                <button class="createRoom-btn" type="submit">Create Room</button>
+            </form>
         </div>
-        <h2>Create a New Room</h2>
-        <form action="/create-room" method="POST">
-            <input type="hidden" name="userId" value="<%= userId %>">
-            <input type="text" name="roomName" placeholder="Enter Room Name" required>
-            <button type="submit">Create Room</button>
-        </form>
-        
-    </section>  
+        <div class="roomList">
+            <h2>Your Rooms</h2>
+            <div id="roomsContainer">
+                <% if (rooms.length===0) { %>
+                    <p>You have not created any rooms yet.</p>
+                    <% } else { %>
+                        <% rooms.forEach(room=> { %>
+                            <a href="/room/<%= room._id %>">
+                                <div class="room">
+
+                                    <h3>
+                                        <%= room.name %>
+                                    </h3>
+
+                                    <button class="deleteRoom" data-id="<%= room._id %>">Delete</button>
+                                </div>
+                            </a>
+                            <% }) %>
+                                <% } %>
+            </div>
+        </div>
+    </section>
 
     <%- include("../partials/footer.ejs") %>

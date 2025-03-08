@@ -24,7 +24,7 @@ router.post("/signup", async (req, res) => {
         );
 
         if (response.status === 201) {
-            return res.redirect("/dashboard");
+            return res.redirect("/login");
         }
     } catch (error) {
         const message = error.response?.data?.error || "Signup failed!";
